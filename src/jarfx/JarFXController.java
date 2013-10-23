@@ -41,6 +41,9 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
@@ -108,6 +111,11 @@ public class JarFXController implements Initializable {
     private TextField classDateField;
     @FXML
     private TextArea classTextArea;
+    @FXML
+    private Tab classSourceTab;
+    @FXML 
+    private TabPane jarContentTabPane;
+    
     private File jarFile;
     ObservableList<String> items = null;
     HashMap<String, ZipEntry> zipEntryMap = new HashMap<>();
@@ -152,7 +160,15 @@ public class JarFXController implements Initializable {
         String classExploded = readInClass(selected);
         System.out.println("Code is: " + classExploded);
         if( classExploded.length() > 0 )
+        {
             this.classTextArea.setText(classExploded);
+            SingleSelectionModel<Tab> selectionModel = this.jarContentTabPane.getSelectionModel();
+            if( selectionModel != null )
+            {
+                selectionModel.select(classSourceTab);
+            }
+            
+        }
         // explodeAndWriteFile(selected, zipEntry);
     }
 
