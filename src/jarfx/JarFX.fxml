@@ -41,7 +41,7 @@
     </Button>
     <TitledPane fx:id="mainPane" animated="false" layoutX="16.0" layoutY="221.0" prefHeight="434.0" prefWidth="628.0" styleClass="FrameHeadingFont" text="Jar Contents">
       <content>
-        <TabPane fx:id="jarContents" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+        <TabPane id="jarContents" fx:id="jarContentTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
           <tabs>
             <Tab text="Classes">
               <content>
@@ -59,7 +59,7 @@
                 </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Source">
+            <Tab fx:id="classSourceTab" text="Source">
               <content>
                 <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                   <children>

@@ -88,7 +88,7 @@
             <URL value="file:/C:/alt_dev/fx_styles/jar_fx.css" />
           </stylesheets>
         </Label>
-        <TextField fx:id="classDateField" layoutX="70.0" layoutY="49.0" prefWidth="92.0" />
+        <TextField fx:id="classDateField" layoutX="70.0" layoutY="49.0" prefWidth="132.0" />
       </children>
       <effect>
         <SepiaTone />
