@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="827.0" prefWidth="656.0" styleClass="pane" xmlns:fx="http://javafx.com/fxml" fx:controller="jarfx.JarFXController">
+  <children>
+    <ImageView fitHeight="123.75" fitWidth="165.0" layoutX="523.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+      <effect>
+        <Reflection>
+          <input>
+            <ColorAdjust brightness="-0.2442748091603053" contrast="0.29007633587786263" hue="0.09160305343511466" saturation="0.12213740458015265" />
+          </input>
+        </Reflection>
+      </effect>
+      <image>
+        <Image url="file:/C:/alt_dev/fx_images/jar.jpg" preserveRatio="false" smooth="false" />
+      </image>
+    </ImageView>
+    <Label layoutX="40.0" layoutY="122.0" styleClass="label2" text="Jar Path">
+      <stylesheets>
+        <URL value="file:/C:/alt_dev/fx_styles/jar_fx.css" />
+      </stylesheets>
+    </Label>
+    <TextField fx:id="jarPathValueDisplay" layoutX="112.0" layoutY="122.0" prefWidth="397.0">
+      <effect>
+        <Reflection />
+      </effect>
+    </TextField>
+    <Button fx:id="setJarPathButton" layoutX="382.0" layoutY="175.0" mnemonicParsing="false" onAction="#setJarPath" prefWidth="125.0" text="Find Jar....">
+      <effect>
+        <SepiaTone />
+      </effect>
+    </Button>
+    <TitledPane fx:id="mainPane" animated="false" layoutX="16.0" layoutY="221.0" prefHeight="434.0" prefWidth="628.0" styleClass="FrameHeadingFont" text="Jar Contents">
+      <content>
+        <TabPane fx:id="jarContents" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+          <tabs>
+            <Tab text="Classes">
+              <content>
+                <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                  <children>
+                    <ListView fx:id="jarListView" prefHeight="405.0" prefWidth="624.0" styleClass="NavBarCell3" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                      <effect>
+                        <SepiaTone />
+                      </effect>
+                      <stylesheets>
+                        <URL value="file:/C:/alt_dev/fx_styles/jar_fx.css" />
+                      </stylesheets>
+                    </ListView>
+                  </children>
+                </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Source">
+              <content>
+                <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                  <children>
+                    <TextArea fx:id="classTextArea" prefHeight="367.0" prefWidth="624.0" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  </children>
+                </AnchorPane>
+              </content>
+            </Tab>
+          </tabs>
+        </TabPane>
+      </content>
+      <stylesheets>
+        <URL value="file:/C:/alt_dev/fx_styles/jar_fx.css" />
+      </stylesheets>
+    </TitledPane>
+    <AnchorPane layoutX="18.0" layoutY="665.0" prefHeight="140.0" prefWidth="624.0">
+      <children>
+        <TextField fx:id="classSizeField" layoutX="70.0" layoutY="11.0" prefWidth="92.0" />
+        <Label disable="true" layoutX="12.0" layoutY="9.0" minHeight="15.0" prefHeight="29.0" prefWidth="50.0" styleClass="label2" text="Size">
+          <stylesheets>
+            <URL value="file:/C:/alt_dev/fx_styles/jar_fx.css" />
+          </stylesheets>
+        </Label>
+        <Label disable="true" layoutX="9.0" layoutY="48.0" minHeight="15.0" prefHeight="29.0" prefWidth="50.0" styleClass="label2" text="Date">
+          <stylesheets>
+            <URL value="file:/C:/alt_dev/fx_styles/jar_fx.css" />
+          </stylesheets>
+        </Label>
+        <TextField fx:id="classDateField" layoutX="70.0" layoutY="49.0" prefWidth="92.0" />
+      </children>
+      <effect>
+        <SepiaTone />
+      </effect>
+      <stylesheets>
+        <URL value="file:/C:/alt_dev/fx_styles/jar_fx.css" />
+      </stylesheets>
+    </AnchorPane>
+  </children>
+  <effect>
+    <InnerShadow blurType="TWO_PASS_BOX" choke="0.2777777777777778" height="91.83333333333333" radius="27.708333333333332" />
+  </effect>
+  <stylesheets>
+    <URL value="file:/C:/alt_dev/fx_styles/jar_fx.css" />
+  </stylesheets>
+</AnchorPane>
