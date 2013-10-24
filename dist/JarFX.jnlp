@@ -11,7 +11,7 @@
   </resources>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="JarFX.jar" size="29386" download="eager" />
+    <jar href="JarFX.jar" size="29384" download="eager" />
   </resources>
 <security>
   <all-permissions/>
