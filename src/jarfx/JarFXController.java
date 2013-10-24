@@ -159,6 +159,7 @@ public class JarFXController implements Initializable {
         System.out.println("Code is: " + classExploded);
         if( classExploded.length() > 0 )
         {
+            this.classSourceTab.setText("Source for: " + selected);
             this.classTextArea.setText(classExploded);
             SingleSelectionModel<Tab> selectionModel = this.jarContentTabPane.getSelectionModel();
             if( selectionModel != null )
