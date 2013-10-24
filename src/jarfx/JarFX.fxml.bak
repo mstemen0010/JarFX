@@ -31,7 +31,11 @@
     </Label>
     <TextField fx:id="jarPathValueDisplay" layoutX="112.0" layoutY="122.0" prefWidth="397.0">
       <effect>
-        <Reflection />
+        <InnerShadow blurType="TWO_PASS_BOX">
+          <input>
+            <Reflection />
+          </input>
+        </InnerShadow>
       </effect>
     </TextField>
     <Button fx:id="setJarPathButton" layoutX="382.0" layoutY="175.0" mnemonicParsing="false" onAction="#setJarPath" prefWidth="125.0" text="Find Jar....">
@@ -47,10 +51,7 @@
               <content>
                 <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                   <children>
-                    <ListView fx:id="jarListView" prefHeight="405.0" prefWidth="624.0" styleClass="NavBarCell3" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                      <effect>
-                        <SepiaTone />
-                      </effect>
+                    <ListView fx:id="jarListView" onInputMethodTextChanged="#handListChange" prefHeight="405.0" prefWidth="624.0" styleClass="NavBarCell3" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                       <stylesheets>
                         <URL value="file:/C:/alt_dev/fx_styles/jar_fx.css" />
                       </stylesheets>

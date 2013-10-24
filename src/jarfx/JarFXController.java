@@ -52,6 +52,30 @@ import javafx.stage.FileChooser;
  *
  * @author mstemen
  */
+
+class jarFXListHandler implements ChangeListener<String>
+{
+    JarFXController myController = null;
+
+    jarFXListHandler(JarFXController controller) {
+        myController = controller;
+    }
+
+    public void setController(JarFXController controller) {
+        myController = controller;
+    }
+
+    jarFXListHandler() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }    
+
+
+    @Override
+    public void changed(ObservableValue<? extends String> ov, String t, String t1) {
+        this.myController.ShowZipInfo();
+    }
+    
+}
 class jarFXMouseHandler implements EventHandler<Event> {
 
     JarFXController myController = null;
@@ -118,8 +142,9 @@ public class JarFXController implements Initializable {
     ObservableList<String> items = null;
     HashMap<String, ZipEntry> zipEntryMap = new HashMap<>();
     private ZipFile classZipFile = null;
+  
 
-    @FXML
+    @FXML 
     public void setJarPath(ActionEvent ae) {
         System.out.println("Click");
 
@@ -150,7 +175,7 @@ public class JarFXController implements Initializable {
             Logger.getLogger(JarFXController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+            
     protected void ExpandClassViaMouse() {
         String selected = this.jarListView.getSelectionModel().getSelectedItem();
         ZipEntry zipEntry = this.zipEntryMap.get(selected);
@@ -221,43 +246,43 @@ public class JarFXController implements Initializable {
         }
     }
 
-    void writeBinaryFile(byte[] aBytes, String aFileName) throws IOException {
+    private void writeBinaryFile(byte[] aBytes, String aFileName) throws IOException {
         Path path = Paths.get(aFileName);
         Files.write(path, aBytes); //creates, overwrites
     }
 
-    protected void explodeAndWriteFile(String className, ZipEntry entry) {
-        String fileName = className;
-        int c;
-        InputStreamReader in = null;
-        BufferedReader br = null;
-        int byteRead;
-        BufferedOutputStream bout = null;
-
-        char[] data = new char[1000];
-
-        try {
-            // ZipInputStream zin = new ZipInputStream( new BufferedInputStream( )
-            // bout = new OutputStreamWriter(new FileOutputStream(fileName));
-            in = new InputStreamReader(classZipFile.getInputStream(entry), "UTF-8");
-            br = new BufferedReader(in);
-        } catch (IOException ex) {
-            Logger.getLogger(JarFXController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            FileWriter fstream = new FileWriter(fileName);
-            BufferedWriter fbw = new BufferedWriter(fstream);
-
-            while ((byteRead = in.read(data, 0, 1000)) != -1) {
-                //bout.write(data, 0, byteRead);
-            }
-
-            fbw.close();
-        } catch (IOException ex) {
-            Logger.getLogger(JarFXController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
+//    protected void explodeAndWriteFile(String className, ZipEntry entry) {
+//        String fileName = className;
+//        int c;
+//        InputStreamReader in = null;
+//        BufferedReader br = null;
+//        int byteRead;
+//        BufferedOutputStream bout = null;
+//
+//        char[] data = new char[1000];
+//
+//        try {
+//            // ZipInputStream zin = new ZipInputStream( new BufferedInputStream( )
+//            // bout = new OutputStreamWriter(new FileOutputStream(fileName));
+//            in = new InputStreamReader(classZipFile.getInputStream(entry), "UTF-8");
+//            br = new BufferedReader(in);
+//        } catch (IOException ex) {
+//            Logger.getLogger(JarFXController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        try {
+//            FileWriter fstream = new FileWriter(fileName);
+//            BufferedWriter fbw = new BufferedWriter(fstream);
+//
+//            while ((byteRead = in.read(data, 0, 1000)) != -1) {
+//                //bout.write(data, 0, byteRead);
+//            }
+//
+//            fbw.close();
+//        } catch (IOException ex) {
+//            Logger.getLogger(JarFXController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//    }
 
     protected void setSelectedZipInfo(ZipEntry entry) {
         SimpleDateFormat sdf = new SimpleDateFormat();
@@ -281,7 +306,7 @@ public class JarFXController implements Initializable {
             // sb.append( className ).append(",").append(entry.getSize());
             sb.append(className);
             zipEntryMap.put(className, entry);
-            System.out.println(sb.toString());
+            // System.out.println(sb.toString());
             items.add(sb.toString());
             this.jarListView.getBaselineOffset();
             // consume all the data from this entry
@@ -329,12 +354,14 @@ public class JarFXController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         jarListView.setOnMouseClicked(new jarFXMouseHandler(this));
-        jarListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            public void changed(ObservableValue<? extends String> observable,
-                    String oldValue, String newValue) {
-                System.out.println("ListView selection changed (new Value: " + newValue + "\n");
-            }
-        });
+        jarListView.getSelectionModel().selectedItemProperty().addListener(new jarFXListHandler(this)) ;
+//        jarListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+//            public void changed(ObservableValue<? extends String> observable,
+//                    String oldValue, String newValue) {
+//                System.out.println("ListView selection changed (new Value: " + newValue + "\n");
+//                
+//            }
+//        });
 //        // TODO         
 //        jarListView = new ListView(FXCollections.observableList(Arrays.asList("one", "2", "3")));
 //        jarListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
