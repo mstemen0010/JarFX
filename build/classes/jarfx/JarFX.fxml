@@ -31,7 +31,11 @@
     </Label>
     <TextField fx:id="jarPathValueDisplay" layoutX="112.0" layoutY="122.0" prefWidth="397.0">
       <effect>
-        <Reflection />
+        <InnerShadow blurType="TWO_PASS_BOX">
+          <input>
+            <Reflection />
+          </input>
+        </InnerShadow>
       </effect>
     </TextField>
     <Button fx:id="setJarPathButton" layoutX="382.0" layoutY="175.0" mnemonicParsing="false" onAction="#setJarPath" prefWidth="125.0" text="Find Jar....">
@@ -39,18 +43,15 @@
         <SepiaTone />
       </effect>
     </Button>
-    <TitledPane fx:id="mainPane" animated="false" layoutX="16.0" layoutY="221.0" prefHeight="434.0" prefWidth="628.0" styleClass="FrameHeadingFont" text="Jar Contents">
+    <TitledPane fx:id="mainPane" prefHeight="434.0" prefWidth="628.0" text="Jar Contents" AnchorPane.bottomAnchor="172.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="221.0">
       <content>
-        <TabPane fx:id="jarContents" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+        <TabPane id="jarContents" fx:id="jarContentTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
           <tabs>
             <Tab text="Classes">
               <content>
                 <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                   <children>
                     <ListView fx:id="jarListView" prefHeight="405.0" prefWidth="624.0" styleClass="NavBarCell3" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                      <effect>
-                        <SepiaTone />
-                      </effect>
                       <stylesheets>
                         <URL value="file:/C:/alt_dev/fx_styles/jar_fx.css" />
                       </stylesheets>
@@ -59,7 +60,7 @@
                 </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Source">
+            <Tab fx:id="classSourceTab" text="Source">
               <content>
                 <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                   <children>
@@ -71,11 +72,14 @@
           </tabs>
         </TabPane>
       </content>
+      <effect>
+        <InnerShadow height="25.03174603174603" radius="12.015873015873016" width="25.03174603174603" />
+      </effect>
       <stylesheets>
         <URL value="file:/C:/alt_dev/fx_styles/jar_fx.css" />
       </stylesheets>
     </TitledPane>
-    <AnchorPane layoutX="18.0" layoutY="665.0" prefHeight="140.0" prefWidth="624.0">
+    <AnchorPane prefHeight="140.0" prefWidth="624.0" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="665.0">
       <children>
         <TextField fx:id="classSizeField" layoutX="70.0" layoutY="11.0" prefWidth="92.0" />
         <Label disable="true" layoutX="12.0" layoutY="9.0" minHeight="15.0" prefHeight="29.0" prefWidth="50.0" styleClass="label2" text="Size">
@@ -99,7 +103,7 @@
     </AnchorPane>
   </children>
   <effect>
-    <InnerShadow blurType="TWO_PASS_BOX" choke="0.2777777777777778" height="91.83333333333333" radius="27.708333333333332" />
+    <DropShadow />
   </effect>
   <stylesheets>
     <URL value="file:/C:/alt_dev/fx_styles/jar_fx.css" />
