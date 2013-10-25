@@ -166,6 +166,7 @@ public class JarFXController implements Initializable {
         if (jarFile != null) {
             jarPathValueDisplay.setText(jarFile.getPath());
             this.mainPane.setVisible(true);
+            this.mainPane.setText("Jar Contents for: " + jarFile.getName() );
         }
         try {
             unjarAndDisplay(jarFile);
