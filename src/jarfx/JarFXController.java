@@ -142,6 +142,9 @@ public class JarFXController implements Initializable {
     ObservableList<String> items = null;
     HashMap<String, ZipEntry> zipEntryMap = new HashMap<>();
     private ZipFile classZipFile = null;
+    
+    private String jadPath = "C:\\WMS_Dev\\";
+    
   
 
     @FXML 
@@ -206,7 +209,7 @@ public class JarFXController implements Initializable {
     protected String readInClass(String className) {
 
         
-        String cmd = "jad";
+        String cmd = jadPath + "jad";
         ProcessBuilder pb = new ProcessBuilder(cmd,"-p", className );
        
         System.out.println(" Command Run was: " + pb.toString() );
@@ -224,7 +227,10 @@ public class JarFXController implements Initializable {
         }
         catch (Exception err) {
             System.out.println("Got Error: " + err.getMessage() );
+             
+            System.out.println("path to jad is curently: " + jadPath );
         }
+        System.out.println("JAD path contained JAD...");
         return codeSb.toString();
     }
 

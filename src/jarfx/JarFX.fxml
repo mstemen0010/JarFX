@@ -10,72 +10,43 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="827.0" prefWidth="656.0" styleClass="pane" xmlns:fx="http://javafx.com/fxml" fx:controller="com.wms.jarfx.JarFXController">
+<AnchorPane id="AnchorPane" prefHeight="827.0" prefWidth="656.0" styleClass="mainFxmlClass" stylesheets="@../com/wms/styles/Flatfxml.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.wms.jarfx.JarFXController">
   <children>
     <ImageView fitHeight="123.75" fitWidth="165.0" layoutX="523.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
       <effect>
-        <ColorAdjust brightness="0.12213740458015265" contrast="0.12213740458015265" hue="0.10687022900763354" saturation="0.09160305343511443">
-          <input>
-            <Glow level="0.3754716981132075">
-              <input>
-                <Reflection />
-              </input>
-            </Glow>
-          </input>
-        </ColorAdjust>
+            <Reflection topOpacity="0.15" />
       </effect>
       <image>
         <Image url="@../com/wms/jarfx/images/jarfx_mk_2.jpg" />
       </image>
     </ImageView>
-    <Label layoutX="40.0" layoutY="122.0" styleClass="label2" text="Jar Path" />
-    <TextField fx:id="jarPathValueDisplay" layoutX="112.0" layoutY="122.0" prefWidth="397.0">
-      <effect>
-        <SepiaTone>
-          <input>
-            <InnerShadow blurType="TWO_PASS_BOX">
-              <input>
-                <Reflection />
-              </input>
-            </InnerShadow>
-          </input>
-        </SepiaTone>
-      </effect>
+    <Label layoutX="40.0" layoutY="122.0" styleClass="flat-label-16" text="Jar Path" />
+    <TextField fx:id="jarPathValueDisplay" layoutX="112.0" layoutY="122.0" prefWidth="397.0" styleClass="flat-back-2">
+         <effect>
+            <Reflection />
+         </effect>
     </TextField>
-    <Button fx:id="setJarPathButton" blendMode="SRC_OVER" layoutX="375.0" layoutY="175.0" mnemonicParsing="false" onAction="#setJarPath" prefWidth="132.0" text="Find Jar...." textAlignment="RIGHT">
-      <effect>
-        <SepiaTone />
-      </effect>
-    </Button>
-    <TitledPane fx:id="mainPane" prefHeight="434.0" prefWidth="628.0" styleClass="theme" text="Jar Contents" AnchorPane.bottomAnchor="172.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="221.0">
+    <Button fx:id="setJarPathButton" blendMode="SRC_OVER" layoutX="375.0" layoutY="175.0" mnemonicParsing="false" onAction="#setJarPath" prefWidth="132.0" styleClass="flat-button-5-18" text="Find Jar...." textAlignment="RIGHT" />
+    <TitledPane fx:id="mainPane" prefHeight="434.0" prefWidth="628.0" styleClass="mainFxmlClass" text="Jar Contents" AnchorPane.bottomAnchor="172.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="221.0">
       <content>
         <TabPane id="jarContents" fx:id="jarContentTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
           <tabs>
-            <Tab text="Classes">
+            <Tab fx:id="classeListTab" text="Classes">
               <content>
                 <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                   <children>
-                    <ListView fx:id="jarListView" prefHeight="405.0" prefWidth="624.0" styleClass="NavBarCell3" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                    <ListView fx:id="jarListView" prefHeight="405.0" prefWidth="624.0" styleClass="flat-button-1-16" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                   </children>
                 </AnchorPane>
               </content>
             </Tab>
-            <Tab fx:id="classSourceTab" text="Source">
+            <Tab id="imageTab" fx:id="imageTab" text="Image">
               <content>
-                <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="mainFxmlClass">
                   <children>
-                    <TextArea fx:id="classTextArea" prefHeight="367.0" prefWidth="624.0" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  </children>
-                </AnchorPane>
-              </content>
-            </Tab>
-            <Tab id="tab1" text="Image">
-              <content>
-                <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                  <children>
-                    <AnchorPane id="AnchorPane" prefHeight="369.0" prefWidth="624.0" styleClass="button" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <AnchorPane id="AnchorPane" fx:id="imagePane" prefHeight="369.0" prefWidth="624.0" styleClass="button" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                       <children>
-                        <ImageView id="emptyImageView1" fitHeight="334.5" fitWidth="446.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true" styleClass="text-area" AnchorPane.rightAnchor="178.0" />
+                        <ImageView id="emptyImageView1" fx:id="jarImageView" fitHeight="334.5" fitWidth="446.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true" styleClass="text-area" AnchorPane.bottomAnchor="34.5" AnchorPane.leftAnchor="-3.0" AnchorPane.rightAnchor="178.0" AnchorPane.topAnchor="-5.5" />
                       </children>
                     </AnchorPane>
                   </children>
@@ -85,30 +56,17 @@
           </tabs>
         </TabPane>
       </content>
-      <effect>
-        <SepiaTone>
-          <input>
-            <InnerShadow height="25.03174603174603" radius="12.015873015873016" width="25.03174603174603" />
-          </input>
-        </SepiaTone>
-      </effect>
     </TitledPane>
     <AnchorPane prefHeight="140.0" prefWidth="624.0" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="665.0">
       <children>
-        <TextField fx:id="classSizeField" layoutX="70.0" layoutY="11.0" prefWidth="92.0" />
-        <Label disable="true" layoutX="12.0" layoutY="9.0" minHeight="15.0" prefHeight="29.0" prefWidth="50.0" styleClass="label2" text="Size" />
-        <Label disable="true" layoutX="9.0" layoutY="48.0" minHeight="15.0" prefHeight="29.0" prefWidth="50.0" styleClass="label2" text="Date" />
-        <TextField fx:id="classDateField" layoutX="70.0" layoutY="49.0" prefWidth="132.0" />
+        <TextField fx:id="classSizeField" layoutX="70.0" layoutY="11.0" prefHeight="22.0" prefWidth="158.0" styleClass="flat-back-5" />
+        <Label disable="true" layoutX="12.0" layoutY="9.0" minHeight="15.0" prefHeight="29.0" prefWidth="50.0" styleClass="flat-label-18" text="Size" />
+        <Label disable="true" layoutX="9.0" layoutY="48.0" minHeight="15.0" prefHeight="29.0" prefWidth="50.0" styleClass="flat-label-16" text="Date" />
+        <TextField fx:id="classDateField" layoutX="70.0" layoutY="49.0" prefHeight="22.0" prefWidth="158.0" styleClass="flat-back-2" />
       </children>
-      <effect>
-        <SepiaTone />
-      </effect>
     </AnchorPane>
   </children>
   <effect>
     <DropShadow />
   </effect>
-  <stylesheets>
-    <URL value="@../com/wms/jarfx/styles/JarFx.css" />
-  </stylesheets>
 </AnchorPane>

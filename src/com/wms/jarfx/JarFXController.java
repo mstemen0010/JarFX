@@ -4,23 +4,22 @@
  */
 package com.wms.jarfx;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +29,7 @@ import java.util.zip.ZipInputStream;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -39,22 +39,28 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javax.imageio.ImageIO;
 
 /**
  *
  * @author mstemen
  */
+class jarFXListHandler implements ChangeListener<String> {
 
-class jarFXListHandler implements ChangeListener<String>
-{
     JarFXController myController = null;
 
     jarFXListHandler(JarFXController controller) {
@@ -67,15 +73,15 @@ class jarFXListHandler implements ChangeListener<String>
 
     jarFXListHandler() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }    
-
+    }
 
     @Override
     public void changed(ObservableValue<? extends String> ov, String t, String t1) {
         this.myController.ShowZipInfo();
     }
-    
+
 }
+
 class jarFXMouseHandler implements EventHandler<Event> {
 
     JarFXController myController = null;
@@ -132,19 +138,28 @@ public class JarFXController implements Initializable {
     @FXML
     private TextField classDateField;
     @FXML
-    private TextArea classTextArea;
-    @FXML
     private Tab classSourceTab;
-    @FXML 
+    @FXML
     private TabPane jarContentTabPane;
-    
+    @FXML
+    private Tab classeListTab;
+    @FXML
+    private Tab imageTab;
+    @FXML
+    private AnchorPane imagePane;
+    @FXML
+    private ImageView jarImageView;
+
+    private ArrayList<Tab> sourceTabs = null;
+
     private File jarFile;
     ObservableList<String> items = null;
     HashMap<String, ZipEntry> zipEntryMap = new HashMap<>();
     private ZipFile classZipFile = null;
-  
 
-    @FXML 
+    private String jadPath = "C:\\WMS_Dev\\";
+
+    @FXML
     public void setJarPath(ActionEvent ae) {
         System.out.println("Click");
 
@@ -166,7 +181,7 @@ public class JarFXController implements Initializable {
         if (jarFile != null) {
             jarPathValueDisplay.setText(jarFile.getPath());
             this.mainPane.setVisible(true);
-            this.mainPane.setText("Jar Contents for: " + jarFile.getName() );
+            this.mainPane.setText("Jar Contents for: " + jarFile.getName());
         }
         try {
             unjarAndDisplay(jarFile);
@@ -176,23 +191,74 @@ public class JarFXController implements Initializable {
             Logger.getLogger(JarFXController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-            
+
     protected void ExpandClassViaMouse() {
         String selected = this.jarListView.getSelectionModel().getSelectedItem();
         ZipEntry zipEntry = this.zipEntryMap.get(selected);
+        // test the zip entry to see if it is a class or image
+        String name = zipEntry.getClass().getName();
+        System.out.println("Class name is: " + name);
         explodeAndWrite(selected, zipEntry);
         String classExploded = readInClass(selected);
         System.out.println("Code is: " + classExploded);
-        if( classExploded.length() > 0 )
-        {
-            this.classSourceTab.setText("Source for: " + selected);
-            this.classTextArea.setText(classExploded);
-            SingleSelectionModel<Tab> selectionModel = this.jarContentTabPane.getSelectionModel();
-            if( selectionModel != null )
-            {
-                selectionModel.select(classSourceTab);
+        if (classExploded.length() > 0) {
+
+            // first see if this source listing is already in the tabPane, test the ArrayList of Tabs
+            Iterator<Tab> it = this.sourceTabs.iterator();
+            boolean tabExists = false;
+            // String targetTabName = "Source for: " + selected;
+            String targetTabName = selected;
+
+            Tab tabThatWasFound = null;
+
+            while (!tabExists && it.hasNext()) {
+                Tab testTab = it.next();
+                if (testTab.getText().equals(targetTabName)) {
+                    tabExists = true;
+                    tabThatWasFound = testTab;
+                }
             }
-            
+            if (tabExists) {
+                // all we want to do is focus the found tab
+                SingleSelectionModel<Tab> selectionModel = this.jarContentTabPane.getSelectionModel();
+                if (selectionModel != null) {
+                    selectionModel.select(tabThatWasFound);
+                }
+            } else {
+
+                //create a new tab, and a textpane, then add the source to the new pane
+                Tab newTab = new Tab();
+                //newTab.setText("Source for: " + selected);
+                newTab.setText(selected);
+                TextArea newTextArea = new TextArea();
+                newTextArea.setText(classExploded);
+                ScrollPane scrollPane = new ScrollPane();
+                double taheight = this.jarListView.getHeight();
+                double tawidth = this.jarListView.getWidth();
+                newTextArea.setPrefHeight(taheight);
+                newTextArea.setPrefWidth(tawidth);
+                scrollPane.setPrefSize(tawidth, taheight);
+//                System.out.println("dynamic tab width is: " + tawidth);
+//                System.out.println("dyamic tab height is: " + taheight);
+//                scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+//                scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+                scrollPane.setContent(newTextArea);
+                newTab.setContent(scrollPane);
+                this.jarContentTabPane.setPrefSize(tawidth, taheight);
+                this.jarContentTabPane.getTabs().add(newTab);
+                SingleSelectionModel<Tab> selectionModel = this.jarContentTabPane.getSelectionModel();
+                if (selectionModel != null) {
+                    selectionModel.select(newTab);
+                }
+            }
+//            this.jarContentTabPane
+//            this.classSourceTab.setText("Source for: " + selected);
+//            this.classTextArea.setText(classExploded);
+//            SingleSelectionModel<Tab> selectionModel = this.jarContentTabPane.getSelectionModel();
+//            if (selectionModel != null) {
+//                selectionModel.select(classSourceTab);
+//            }
+
         }
         // explodeAndWriteFile(selected, zipEntry);
     }
@@ -205,11 +271,10 @@ public class JarFXController implements Initializable {
 
     protected String readInClass(String className) {
 
-        
-        String cmd = "jad";
-        ProcessBuilder pb = new ProcessBuilder(cmd,"-p", className );
-       
-        System.out.println(" Command Run was: " + pb.toString() );
+        String cmd = jadPath + "jad";
+        ProcessBuilder pb = new ProcessBuilder(cmd, "-p", className);
+
+        System.out.println(" Command Run was: " + pb.toString());
         StringBuilder codeSb = new StringBuilder();
 
         try {
@@ -221,16 +286,18 @@ public class JarFXController implements Initializable {
                     codeSb.append((char) byteRead);
                 }
             }
+        } catch (Exception err) {
+            System.out.println("Got Error: " + err.getMessage());
+
+            System.out.println("path to jad is curently: " + jadPath);
         }
-        catch (Exception err) {
-            System.out.println("Got Error: " + err.getMessage() );
-        }
+        System.out.println("JAD path contained JAD...");
         return codeSb.toString();
     }
 
     protected void explodeAndWrite(String className, ZipEntry entry) {
         try {
-            byte[] data = new byte[30000];
+            byte[] data = new byte[300000];
             int byteRead;
 
             BufferedOutputStream bout = null;
@@ -238,9 +305,42 @@ public class JarFXController implements Initializable {
             InputStream in = classZipFile.getInputStream(entry);
             byteRead = 0;
             data = new byte[fLen];
+            // now either write an image or a class...
+            boolean isImage = (entry.getName().toLowerCase().contains("jpg") || entry.getName().toLowerCase().contains("png"));
+            if (isImage) {
+                Image image = null;
+                BufferedImage bfi = ImageIO.read(in);
+                WritableImage wr = null;
+                if (bfi != null) {
+                    wr = new WritableImage(bfi.getWidth(), bfi.getHeight());
+                    PixelWriter pw = wr.getPixelWriter();
+                    for (int x = 0; x < bfi.getWidth(); x++) {
+                        for (int y = 0; y < bfi.getHeight(); y++) {
+                            pw.setArgb(x, y, bfi.getRGB(x, y));
+                        }
+                    }
+                    ScrollPane scrollPane = new ScrollPane();
 
-            while ((byteRead = in.read(data, 0, fLen)) != -1) {
-                this.writeBinaryFile(data, className);
+                    imagePane.getChildren().clear();
+                    image = SwingFXUtils.toFXImage(bfi, null);
+                    if (image != null) {
+                        jarImageView = new ImageView(wr);
+                        jarImageView.setImage(image);
+                        imagePane.getChildren().add(jarImageView);
+                     // this.imageTab.setContent(scrollPane);
+                        // focus the image tab
+                        SingleSelectionModel<Tab> selectionModel = this.jarContentTabPane.getSelectionModel();
+                        if (selectionModel != null) {
+                            selectionModel.select(imageTab);
+                        }
+                    }
+
+                }
+
+            } else {
+                while ((byteRead = in.read(data, 0, fLen)) != -1) {
+                    this.writeBinaryFile(data, className);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -284,8 +384,9 @@ public class JarFXController implements Initializable {
 //        }
 //
 //    }
-
     protected void setSelectedZipInfo(ZipEntry entry) {
+        if( entry == null )
+            return;
         SimpleDateFormat sdf = new SimpleDateFormat();
         this.classSizeField.setText(String.valueOf(entry.getSize()));
         this.classDateField.setText(sdf.format(new Date(entry.getTime())));
@@ -299,9 +400,13 @@ public class JarFXController implements Initializable {
 
         this.clearJarList();
         while ((entry = zis.getNextEntry()) != null) {
-            if (!entry.getName().contains("class")) {
+            if (entry.getName().toLowerCase().contains("jpg") || entry.getName().toLowerCase().contains("png")) {
+                System.out.println("Got image: " + entry.getName());
+
+            } else if (!entry.getName().contains("class")) {
                 continue;
             }
+
             StringBuilder sb = new StringBuilder("");
             String className = this.getClassName(entry.getName());
             // sb.append( className ).append(",").append(entry.getSize());
@@ -353,9 +458,9 @@ public class JarFXController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        sourceTabs = new ArrayList<Tab>();
         jarListView.setOnMouseClicked(new jarFXMouseHandler(this));
-        jarListView.getSelectionModel().selectedItemProperty().addListener(new jarFXListHandler(this)) ;
+        jarListView.getSelectionModel().selectedItemProperty().addListener(new jarFXListHandler(this));
 //        jarListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 //            public void changed(ObservableValue<? extends String> observable,
 //                    String oldValue, String newValue) {
