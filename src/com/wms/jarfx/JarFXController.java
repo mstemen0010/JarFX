@@ -157,7 +157,8 @@ public class JarFXController implements Initializable {
     HashMap<String, ZipEntry> zipEntryMap = new HashMap<>();
     private ZipFile classZipFile = null;
 
-    private String jadPath = "C:\\WMS_Dev\\";
+    // private String jadPath = "C:\\WMS_Dev\\";
+    private String jadPath = "C:\\Users\\173510\\Documents\\GitHub\\JarFX\\jad\\";
 
     @FXML
     public void setJarPath(ActionEvent ae) {

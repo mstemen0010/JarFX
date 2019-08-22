@@ -141,13 +141,13 @@ and open the template in the editor.
 }
 .flat-back-5
 {
-    -fx-background-color: #3498db;// peter river
+    -fx-background-color: #3498db;
     -fx-background-radius: 0;
     -fx-text-fill: white;   
 }
 .flat-back-6
 {
-    -fx-background-color: #34495e;// wet asphalt
+    -fx-background-color: #34495e;
     -fx-background-radius: 0;
     -fx-text-fill: white;   
 } 
